@@ -30,8 +30,7 @@ if(process.argv[2] === 'spotify-this') {
             console.log(JSON.stringify(data));
         }
     })};
-
-
+    //having trouble with keys, and getting responses in general. i check back in later.
 if(process.argv[2] === 'movie-this'){
     for(let c = 2; c < process.argv.length; c++){
     var movieName = process.argv[c]; 
