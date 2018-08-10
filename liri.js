@@ -8,34 +8,48 @@ var Twitter = require('twitter')
 var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
-if (process.argv[2] === "my-tweets") { //tinkered around with the notation, unable to fully process this api call, a little worried i watched youtube guides and it seemed much easier.
-    var params = { screen_name: 'everythingbage9' };// my twitter account of my girlfriends cat.
-    client.get('statuses/read', params, function (error, tweets, response) { // the actual api call, with what i want it to return.
+//below is the twitter call which i am convinced is failing because my env keys are off
+//it seems they have recently changed their policy and i have to reapply for my access tokens.
+if (process.argv[2] === "my-tweets") { 
+    var params = { screen_name: 'everythingbage9' };
+    client.get('statuses/user_timeline"', params, function (error, tweets, response) { 
         if (error) {
-            console.log(response.tweets); //seems to be an error because it's returning this undefined.
+                console.log(error)
+        }    else {
+            for(let i = 0; i < tweets.length; i++) {
+            console.log(tweets[i].created_at);
+            console.log(tweets[i].text);
         }
+    
+    }
         // this should work under the documentation -- error code 34, says that page doesnt exist. unable to verify my keys are correct
     }
     )
 };
-if (process.argv[2] === 'spotify-this') { // initial call from spotify
-    for (let d = 3; d < process.argv.length; d++) { // ensures the last of the arguments typed in are just one solid string.
-        var songName = process.argv[d] //the pairing of the final argument words in the object.
+if (process.argv[2] === 'spotify-this') { 
+    for (let d = 3; d < process.argv.length; d++) { 
+        var songName = process.argv[d];
     }
     spotify.search({ type: 'track', query: songName }, function (err, data) { // the official spotify call with the query parameters, we're searching for song names in particular
         if (err) { // error logging
             console.log('Error occurred: ' + err);// console logging error
             return;
         }
-        else {
-            console.log(JSON.stringify(data)); // returns a massive amount of data unable to.
-        }//having trouble parsing the JSON object into something I want. right now stringify is the only thing that works.
+        var songs = data.tracks.items;
+
+        for (var i = 0; i < songs.length; i++) {
+            console.log(i);
+            console.log("Song Name: " + songs[i].name);
+            console.log("Artist: " + songs[i].artist);;
+        }
+            // console.log(JSON.stringify(data)); // returns a massive amount of data unable to parsecon
+        //having trouble parsing the JSON object into something I want. right now stringify is the only thing that works.
     })
 };
-//having trouble with keys, and getting responses in general. i check back in later.
-if (process.argv[2] === 'movie-this') {  //this call seems to be working the way i'd like, its the only npm call that actually works it looks like.
-    for (let c = 3; c < process.argv.length; c++) { // the same thing to ensure the final words of whats typed into the console turn into a string to be searched.
-        var movieName = "'" + process.argv[c]; + "'" //just shooting from the hip.
+
+if (process.argv[2] === 'movie-this') { 
+    for (let c = 3; c < process.argv.length; c++) { 
+        var movieName = "'" + process.argv[c]; + "'"
     }
     var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
